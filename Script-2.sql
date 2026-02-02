@@ -40,3 +40,73 @@ ADD COLUMN estoque_anterior integer DEFAULT 0,
 ADD COLUMN estoque_definido integer DEFAULT 0;
 
 SELECT * FROM items;
+SELECT * FROM items_logs;
+
+SELECT * FROM users;
+
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+	NEW.updated_at = current_timestamp;
+	RETURN NEW;
+END;
+
+$$ LANGUAGE plpgsql;
+
+-- Trigger para users
+CREATE TRIGGER update_users_updated_at
+BEFORE UPDATE ON users
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();
+
+-- Trigger para items
+CREATE TRIGGER update_items_updated_at
+BEFORE UPDATE ON items
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
