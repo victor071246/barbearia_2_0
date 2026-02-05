@@ -23,3 +23,6 @@ bcrypt = "0.16"
 
 # Environment
 dotenv = "0.15"
+
+#JWT
+jsonwebtoken = "9"
