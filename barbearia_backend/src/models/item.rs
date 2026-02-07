@@ -37,7 +37,7 @@ pub struct UpdateItemRequest {
     pub estoque_minimo: Option<i32>,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, sqlx::FromRow)]
 pub struct ItemResponse {
     pub id: i32,
     pub nome: String,
