@@ -1,0 +1,29 @@
+# API Barbearia - Testes com cURL
+
+## Criar Usuário
+curl -X POST http://127.0.0.1:3000/users \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "admin",
+    "email": "admin@barbearia.com",
+    "password": "senha123"
+  }'
+
+## Listar Todos Usuários
+curl -X GET http://127.0.0.1:3000/users
+
+## Buscar Usuário por ID
+curl -X GET http://127.0.0.1:3000/users/1
+
+## Atualizar Usuário
+curl -X PUT http://127.0.0.1:3000/users/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "new_username": "admin_updated",
+    "user_new_email": "admin_new@barbearia.com",
+    "user_new_password": "novaSenha123"
+  }'
+
+## Deletar Usuário
+curl -X DELETE http://127.0.0.1:3000/users/1
+
