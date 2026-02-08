@@ -35,9 +35,9 @@ pub async fn create_user(State(pool): State<PgPool>, Json(payload): Json<CreateU
             };
             (StatusCode::CREATED, Json(response))
         },
-        Err(_) => {
+        Err(e) => {
             let response = ApiResponse {
-                message: "Failed to create user".to_string(),
+                message: format!("Failed to create user: {e}"),
                 data: None,
             };
             (StatusCode::BAD_REQUEST, Json(response))
@@ -58,9 +58,9 @@ pub async fn get_user_by_id(Path(id): Path<i32>, State(pool): State<PgPool>) -> 
             };
             (StatusCode::OK, Json(response))
         },
-        Err(_) => {
+        Err(e) => {
             let response = ApiResponse {
-                message: "User not found".to_string(),
+                message: format!("User not found: {e}"),
                 data: None
             };
             (StatusCode::NOT_FOUND, Json(response))
@@ -87,9 +87,9 @@ pub async fn get_all_users(State(pool) : State<PgPool>) -> (StatusCode, Json<Api
         };
         (StatusCode::OK, Json(response))
         },
-        Err(_) => {
+        Err(e) => {
             let response = ApiResponse {
-                message: "Error to find users".to_string(),
+                message: format!("Error to find users: {e}"),
                 data: None,
             };
             (StatusCode::INTERNAL_SERVER_ERROR, Json(response))
@@ -109,9 +109,9 @@ pub async fn update_user(Path(id): Path<i32>, State(pool) : State<PgPool>, Json(
 
     let (current_username, current_email, current_password_hash) = match current_user {
         Ok(user) => user,
-        Err(_) => {
+        Err(e) => {
             let response = ApiResponse {
-                message: "User not found".to_string(),
+                message: format!("User not found: {e}"),
                 data: None
             };
             return (StatusCode::NOT_FOUND, Json(response));
@@ -125,9 +125,9 @@ pub async fn update_user(Path(id): Path<i32>, State(pool) : State<PgPool>, Json(
     let new_password_hash = if let Some(new_password) = payload.user_new_password {
         match hash(&new_password, DEFAULT_COST) {
             Ok(h) => h,
-            Err(_) => {
+            Err(e) => {
                 let response = ApiResponse {
-                    message: "Error to process password".to_string(),
+                    message: format!("Error to process password"),
                     data: None
                 };
                 return (StatusCode::INTERNAL_SERVER_ERROR, Json(response))
@@ -157,9 +157,9 @@ pub async fn update_user(Path(id): Path<i32>, State(pool) : State<PgPool>, Json(
                 };
                 (StatusCode::OK, Json(response))
             },
-            Err(_) => {
+            Err(e) => {
                 let response = ApiResponse {
-                    message: "Error to update user".to_string(),
+                    message: format!("Error to update user: {e}"),
                     data: None
                 };
                 (StatusCode::BAD_REQUEST, Json(response))
@@ -190,9 +190,9 @@ pub async fn delete_user(State(pool): State<PgPool>, Path(id) : Path<i32>) -> (S
                 (StatusCode::NOT_FOUND, Json(response))
             }
         },
-        Err(_) => {
+        Err(e) => {
             let response = ApiResponse {
-                message: "Error to delete user".to_string(),
+                message: format!("Error to delete user: {e}"),
                 data: None
             };
             (StatusCode::INTERNAL_SERVER_ERROR, Json(response))

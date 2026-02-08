@@ -30,7 +30,7 @@ pub async fn create_item(State(pool): State<PgPool>, Json(payload): Json<CreateI
         },
         Err(e) => {
             let response = ApiResponse {
-                message: format!("Falha ao criar item: {}", e),
+                message: format!("Failed to create item: {}", e),
                 data: None,
             };
             (StatusCode::BAD_REQUEST, Json(response))
@@ -57,7 +57,7 @@ pub async fn get_all_items(State(pool): State<PgPool>) -> (StatusCode, Json<ApiR
         },
         Err(e) => {
             let response = ApiResponse {
-                message: format!("Fail to get items: {}", e),
+                message: format!("Failed to get items: {}", e),
                 data: None
             };
             (StatusCode::INTERNAL_SERVER_ERROR, Json(response))
@@ -82,9 +82,9 @@ pub async fn get_item_by_id(State(pool): State<PgPool>, Path(id): Path<i32>) -> 
             };
             (StatusCode::OK, Json(response))
         },
-        Err(_) => {
+        Err(e) => {
             let response = ApiResponse {
-                message: "Item not found".to_string(),
+                message: format!("Item not found {e}"),
                 data: None,
             };
             (StatusCode::NOT_FOUND, Json(response))
@@ -106,9 +106,9 @@ pub async fn update_item(State(pool): State<PgPool>, Path(id): Path<i32>, Json(p
 
     let current_item = match current {
         Ok(item) => item,
-        Err(_) => {
+        Err(e) => {
             let response = ApiResponse {
-                message: "Item not found".to_string(),
+                message: format!("Item not found: {e}"),
                 data: None,
             };
             return (StatusCode::NOT_FOUND, Json(response));

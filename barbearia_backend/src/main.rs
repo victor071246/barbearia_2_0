@@ -3,19 +3,23 @@ mod handlers;
 mod response;
 mod routes;
 mod db;
+mod middleware;
 
-use routes::user_routes::user_routes;
+use axum::Router;
+use routes::{user_routes::user_routes, item_routes::item_routes};
 
 #[tokio::main]
 async fn main() {
     dotenv::dotenv().ok();
 
-    let pool = db::create_pool().await.expect("Falha to connect to database");
-    let app = user_routes(pool);
+    let pool = db::create_pool().await.expect("Failed to connect to database");
+    let app = Router::new()
+    .merge(user_routes(pool.clone()))
+    .merge(item_routes(pool.clone()));
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000").await.unwrap();
 
-    println!("Servidor rodando em http://127.0.0.1:3000");
+    println!("Server running on http://127.0.0.1:3000");
 
     axum::serve(listener, app).await.unwrap();
 }
