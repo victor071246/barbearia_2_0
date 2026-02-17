@@ -9,6 +9,7 @@ export interface User {
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
+  isLoggedIn: boolean;
 
   checkAuth: () => Promise<void>;
   login: (username: string, password: string) => Promise<void>;
@@ -19,6 +20,7 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   isAuthenticated: false,
+  isLoggedIn: false,
 
   checkAuth: async () => {
     try {

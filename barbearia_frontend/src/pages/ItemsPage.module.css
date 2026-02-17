@@ -1,0 +1,7 @@
+.container {
+  display: flex;
+  height: 70dvh;
+  width: 70dvw;
+  background-color: grey;
+  text-align: center;
+}
