@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
-import { api } from '../../api/client';
-import styles from './TopBar.module.css';
+import { useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { useAuthStore, type User } from '../../store/authStore';
+import styles from './TopBar.module.css';
 
 export function TopBar() {
   const user = useAuthStore((state) => state.user);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const checkAuth = useAuthStore((state) => state.checkAuth);
   const logout = useAuthStore((state) => state.logout);
 
@@ -18,17 +20,17 @@ export function TopBar() {
         <img src="../assets/logo.png"></img>
       </div>
       <div className={styles.auth}>
-        {user ? (
-          <>
-            <span className={styles.username}>Olá, {user.username}</span>
-            <button className={styles.btn} onClick={logout}>
-              Sair
-            </button>
-          </>
+        {isLoggedIn ? (
+          <FontAwesomeIcon
+            classname={styles.icon}
+            icon={faSignOutAlt}
+          ></FontAwesomeIcon>
         ) : (
-          <button className={styles.btn}>Entrar</button>
+          <FontAwesomeIcon
+            icon={faSignInAlt}
+            classname={styles.icon}
+          ></FontAwesomeIcon>
         )}
-        ;
       </div>
     </div>
   );

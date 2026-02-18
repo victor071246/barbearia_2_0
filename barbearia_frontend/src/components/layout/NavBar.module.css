@@ -1,0 +1,48 @@
+/* NavBar.module.css - 100% dvh */
+
+.navbar {
+  height: 10dvh;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3dvh;
+  padding: 0 5%;
+  background: rgba(26, 26, 26, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Cada link da navbar */
+.navbar_select_box {
+  flex: 1;
+  max-width: 20%;
+  height: 6dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1.5dvh;
+  color: #ccc;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 2dvh;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* Link ativo */
+.active {
+  background: linear-gradient(45deg, #d4a574, #f0c14b);
+  color: #1a1a1a;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(212, 165, 116, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Hover */
+.navbar_select_box:hover {
+  background: rgba(212, 165, 116, 0.2);
+  color: #ffd700;
+  transform: translateY(-1px);
+}
