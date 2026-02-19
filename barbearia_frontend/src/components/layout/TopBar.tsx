@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { useAuthStore, type User } from '../../store/authStore';
 import styles from './TopBar.module.css';
+import logo from './../../assets/logo.png';
 
 export function TopBar() {
   const user = useAuthStore((state) => state.user);
@@ -17,18 +18,18 @@ export function TopBar() {
   return (
     <div className={styles.topbar}>
       <div className={styles.logo}>
-        <img src="../assets/logo.png"></img>
+        <img src={logo}></img>
       </div>
       <div className={styles.auth}>
         {isLoggedIn ? (
           <FontAwesomeIcon
-            classname={styles.icon}
+            className={styles.icon}
             icon={faSignOutAlt}
           ></FontAwesomeIcon>
         ) : (
           <FontAwesomeIcon
             icon={faSignInAlt}
-            classname={styles.icon}
+            className={styles.icon}
           ></FontAwesomeIcon>
         )}
       </div>

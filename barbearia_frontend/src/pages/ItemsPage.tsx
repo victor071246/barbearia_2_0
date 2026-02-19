@@ -1,4 +1,4 @@
-import style from './Items.module.css';
+import style from './ItemsPage.module.css';
 
 export function ItemsPage() {
   return (
