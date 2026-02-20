@@ -2,10 +2,10 @@
 
 .topbar {
   height: 12dvh;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 5%;
   background: linear-gradient(90deg, #1a1a1a 0%, #2d2d2d 100%);
   border-bottom: 1px solid #444;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
@@ -13,12 +13,13 @@
 
 /* Logo */
 .logo {
-  flex: 0 0 auto;
+  left: 0;
+  display: flex;
 }
 
 .logo img {
-  height: 8dvh;
-  max-height: 70px;
+  padding: 5%;
+  height: 10dvh;
   width: auto;
 }
 
@@ -32,16 +33,15 @@
 
 /* Ícone */
 .icon {
-  font-size: 4dvh;
-  color: #e0e0e0;
+  font-size: 3dvh;
+  color: #ffffff;
   cursor: pointer;
-  padding: 1dvh;
+  padding: 3dvh;
   border-radius: 50%;
   transition: all 0.3s ease;
 }
 
 .icon:hover {
-  transform: scale(1.15) rotate(10deg);
-  color: #ffd700;
-  background: rgba(255, 215, 0, 0.1);
+  /* transform: scale(1.15) rotate(10deg); */
+  color: #56544b;
 }

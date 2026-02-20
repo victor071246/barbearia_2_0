@@ -1,7 +1,109 @@
 .container {
+  width: 100%;
+  height: 72dvh;
   display: flex;
-  width: 100dvw;
-  height: 70dvh;
-  background-color: black;
-  text-align: center;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid black;
+  border-top: none;
+  padding-top: 2dvh;
+  margin-bottom: 2dvh;
+  box-sizing: border-box;
+}
+
+.second_box {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.box {
+  overflow: hidden;
+  border-radius: 5px;
+  width: 93%;
+  height: 95%;
+  border: 1px solid black;
+}
+
+.grid {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slice {
+  position: absolute;
+  width: 160%;
+  height: 55%;
+  left: -30%;
+  cursor: pointer;
+  transition: filter 0.3s ease;
+  overflow: hidden;
+  filter: brightness(0.25);
+}
+
+.slice.dimmed {
+  filter: brightness(0.25);
+  border-top: black 1px solid;
+}
+
+/* Quando o slice NÃO está dimmed (está ativo/selecionado) */
+.slice:not(.dimmed)::after {
+  content: '';
+  position: absolute;
+  inset: 0; /* cobre o slice inteiro */
+  border: 1px solid black;
+  z-index: 10;
+  pointer-events: none; /* não interfere nos cliques */
+  filter: brightness(1);
+}
+
+.slice:not(.dimmed) {
+  filter: brightness(1);
+}
+
+.sliceCortes {
+  background-color: #e63946;
+  top: -15%;
+  transform: rotate(-15deg);
+  z-index: 1;
+}
+
+.sliceProdutos {
+  background-color: #2a9d8f;
+  top: 30%;
+  transform: rotate(-15deg);
+  z-index: 2;
+}
+
+.sliceContato {
+  background-color: #e9c46a;
+  top: 65%;
+  transform: rotate(-15deg);
+  z-index: 3;
+}
+
+.slice_content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.slice_content img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.4;
+}
+
+.slice_content span {
+  position: absolute;
+  z-index: 1;
+  bottom: 20%;
+  left: 30%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  transform: rotate(15deg); /* cancela o rotate do slice */
 }
