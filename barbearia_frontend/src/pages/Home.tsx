@@ -1,8 +1,9 @@
-import { useState } from 'react';
 import styles from './Home.module.css';
+import { useSliceStore } from '../store/sliceStore';
 
 export function Home() {
-  const [active, setActive] = useState<string | null>(null);
+  const active = useSliceStore((state) => state.activeSlice);
+  const setActive = useSliceStore((state) => state.setActiveSlice);
 
   return (
     <div className={styles.container}>
@@ -21,7 +22,7 @@ export function Home() {
               </div>
             </div>
             <div
-              className={`${styles.slice} ${styles.sliceProdutos} ${active && active !== 'produtos' ? styles.dimmed : ''}`}
+              className={`${styles.slice} $e{styles.sliceProdutos} ${active && active !== 'produtos' ? styles.dimmed : ''}`}
               onClick={() => setActive('produtos')}
             >
               <div className={styles.slice_content}>
