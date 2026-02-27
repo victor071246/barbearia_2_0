@@ -22,7 +22,7 @@ export function Home() {
               </div>
             </div>
             <div
-              className={`${styles.slice} $e{styles.sliceProdutos} ${active && active !== 'produtos' ? styles.dimmed : ''}`}
+              className={`${styles.slice} ${styles.sliceProdutos} ${active && active !== 'produtos' ? styles.dimmed : ''}`}
               onClick={() => setActive('produtos')}
             >
               <div className={styles.slice_content}>
