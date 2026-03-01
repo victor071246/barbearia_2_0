@@ -1,5 +1,6 @@
 import styles from './Home.module.css';
 import { useSliceStore } from '../store/sliceStore';
+import { HomeButtons } from '../components/layout/HomeButtons';
 
 export function Home() {
   const active = useSliceStore((state) => state.activeSlice);
@@ -7,11 +8,12 @@ export function Home() {
 
   return (
     <div className={styles.container}>
+      <HomeButtons></HomeButtons>
       <div className={styles.second_box}>
         <div className={styles.box}>
           <div className={styles.grid}>
             <div
-              className={`${styles.slice} ${styles.sliceCortes} ${active && active !== 'cortes' ? '' : 'styles.dimmed'}`}
+              className={`${styles.slice} ${styles.sliceCortes} ${active && active !== 'cortes' ? styles.dimmed : ''}`}
               onClick={() => setActive('cortes')}
             >
               <div className={styles.slice_content}>
