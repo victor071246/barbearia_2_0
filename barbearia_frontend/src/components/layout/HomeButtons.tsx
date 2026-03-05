@@ -9,21 +9,20 @@ export function HomeButtons() {
   return (
     <div className={styles.buttons_container}>
       <button
-        className={`${styles.btn} ${activeSlice === 'cortes' ? styles.active : ''}`}
+        className={`${styles.btn} ${styles.btn1} ${activeSlice === 'cortes' ? styles.active : ''}`}
       >
         CORTES
       </button>
       <button
-        className={`${styles.btn} ${activeSlice === 'produtos' ? styles.active : ''}`}
+        className={`${styles.btn} ${styles.btn2} ${activeSlice === 'produtos' ? styles.active : ''}`}
       >
         PRODUTOS
       </button>
       <button
-        className={`${styles.btn} ${activeSlice === 'contato' ? styles.active : ''}`}
+        className={`${styles.btn} ${styles.btn3} ${activeSlice === 'contato' ? styles.active : ''}`}
       >
         CONTATO
       </button>
-      m
     </div>
   );
 }

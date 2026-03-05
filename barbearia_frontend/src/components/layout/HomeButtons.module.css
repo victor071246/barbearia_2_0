@@ -1,15 +1,14 @@
 .buttons_container {
-  position: fixed; /* ou absolute se preferir */
-  bottom: 20px;
+  position: absolute; /* ou absolute se preferir */
+  display: flex;
+  flex-direction: column;
   left: 50%;
   transform: translateX(-50%);
   z-index: 9999; /* Alto pra caralho */
   display: flex;
   gap: 12px;
   padding: 12px;
-  background: rgba(0, 0, 0, 0.9);
   border-radius: 25px;
-  backdrop-filter: blur(10px);
 }
 
 .btn {
@@ -20,13 +19,39 @@
   font-size: 14px;
   cursor: pointer;
   transition: all 0.3s;
+  display: none;
   min-width: 90px;
+}
+
+.btn1 {
+  display: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 6dvh;
+}
+
+.btn2 {
+  display: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 28dvh;
+}
+
+.btn3 {
+  display: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 52dvh;
 }
 
 .btn.active {
   background: linear-gradient(45deg, #ff6b6b, #feca57);
   color: white;
-  box-shadow: 0 8px 25px rgba(254, 202, 87, 0.4);
+  /* box-shadow: 0 8px 25px rgba(254, 202, 87, 0.4); */
+  display: block;
 }
 
 .btn:hover {
