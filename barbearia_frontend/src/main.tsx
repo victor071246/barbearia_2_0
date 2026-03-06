@@ -7,6 +7,7 @@ import { ItemsPage } from './pages/ItemsPage';
 import { ContactPage } from './pages/ContactPage';
 import { StrictMode } from 'react';
 import './index.css';
+import { Footer } from './components/layout/Footer';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -18,6 +19,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/servicos" element={<ItemsPage />} />
         <Route path="/contato" element={<ContactPage />} />
       </Routes>
+      <Footer></Footer>
     </BrowserRouter>
   </StrictMode>,
 );
