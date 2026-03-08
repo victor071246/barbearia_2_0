@@ -10,6 +10,7 @@ use crate::handlers::item_handler::{
     get_item_by_id,
     update_item,
     delete_item,
+    get_items_by_category
 };
 use crate::middleware::auth_middleware::auth_middleware;
 
@@ -22,7 +23,8 @@ pub fn item_routes(pool: PgPool) -> Router {
 
     let public = Router::new()
     .route("/items", get(get_all_items))
-    .route("/items/:id", get(get_item_by_id));
+    .route("/items/:id", get(get_item_by_id))
+    .route("/items/category/:category", get(get_items_by_category));
 
     Router::new()
         .merge(protected)

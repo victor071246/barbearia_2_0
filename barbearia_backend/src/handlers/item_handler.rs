@@ -65,6 +65,29 @@ pub async fn get_all_items(State(pool): State<PgPool>) -> (StatusCode, Json<ApiR
     }
 }
 
+pub async fn get_items_by_category( State(pool): State<PgPool>, Path(category): Path<String>) -> (StatusCode, Json<ApiResponse<Vec<ItemResponse>>>) {
+    let result = sqlx::query_as::<_, ItemResponse>(
+        "SELECT id, nome, descricao, preco, image_url, tipo, estoque_atual, estoque FROM items WHERE tipo = $1"
+    ).bind(&category).fetch_all(&pool).await;
+
+    match result {
+        Ok(items) => {
+            let response = ApiResponse {
+                message: "Items found".to_string(),
+                data: Some(items)
+            };
+            (StatusCode::OK, Json(response))
+        }
+        Err(e) => {
+            let response = ApiResponse {
+                message: format!("Failed to get items: {}", e),
+                data: None,
+            };
+            (StatusCode::INTERNAL_SERVER_ERROR, Json(response))
+        }
+    }
+}
+
 //GET ONE
 pub async fn get_item_by_id(State(pool): State<PgPool>, Path(id): Path<i32>) -> (StatusCode, Json<ApiResponse<ItemResponse>>) {
     let result = sqlx::query_as::<_, ItemResponse>(
