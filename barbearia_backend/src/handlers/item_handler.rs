@@ -67,7 +67,7 @@ pub async fn get_all_items(State(pool): State<PgPool>) -> (StatusCode, Json<ApiR
 
 pub async fn get_items_by_category( State(pool): State<PgPool>, Path(category): Path<String>) -> (StatusCode, Json<ApiResponse<Vec<ItemResponse>>>) {
     let result = sqlx::query_as::<_, ItemResponse>(
-        "SELECT id, nome, descricao, preco, image_url, tipo, estoque_atual, estoque FROM items WHERE tipo = $1"
+        "SELECT id, nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo FROM items WHERE tipo = $1"
     ).bind(&category).fetch_all(&pool).await;
 
     match result {
