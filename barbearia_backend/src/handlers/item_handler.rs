@@ -2,42 +2,61 @@ use axum::{Json, extract::{Path, State}, http::StatusCode};
 use sqlx::PgPool;
 use crate::models::item::{CreateItemRequest, UpdateItemRequest, ItemResponse};
 use crate::response::ApiResponse;
+use axum::extract::Multipart;
+use crate::middleware::upload_middleware::extract_image;
 
 // CREATE
-pub async fn create_item(State(pool): State<PgPool>, Json(payload): Json<CreateItemRequest>) -> (StatusCode, Json<ApiResponse<ItemResponse>>) {
+pub async fn create_item(
+    State(pool): State<PgPool>,
+    mut multipart: Multipart
+) -> (StatusCode, Json<ApiResponse<ItemResponse>>) {
+    let mut nome = String::new();
+    let mut descricao: Option<String> = None;
+    let mut preco: f64 = 0.0;
+    let mut tipo: Option<String> = None;
+    let mut estoque_atual: i32 = 0;
+    let mut estoque_minimo: i32 = 0;
+    let mut image_url: Option<String> = None;
+
+    while let Some(field) = multipart.next_field().await.unwrap_or(None) {
+        match field.name().unwrap_or(""){
+            "nome" => nome = field.text().await.unwrap_or_default(),
+            "descricao" => descricao = Some(field.text().await.unwrap_or_default()),
+            "preco" => preco = field.text().await.unwrap_or_default().parse().unwrap_or(0.0),
+            "tipo" => tipo = Some(field.text().await.unwrap_or_default()),
+            "estoque_atual" => estoque_atual = field.text().await.unwrap_or_default().parse().unwrap_or(0),
+            "estoque_minimo" => estoque_minimo = field.text().await.unwrap_or_default().parse().unwrap_or(0),
+            "image" => image_url = extract_image(field).await,
+            _ => {}
+        }
+    }
+
     let result = sqlx::query_as::<_, ItemResponse>(
-        "INSERT INTO items (nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo)
+        "INSERT INTO items (nome, descricao, preco, image_url, tipo, estoque atual, estoque_minimo)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
-        RETURNING id, nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo, updated_at, updated_by"
+        RETURNING id, nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo)"
     )
-    .bind(&payload.nome)
-    .bind(&payload.descricao)
-    .bind(payload.preco)
-    .bind(&payload.image_url)
-    .bind(&payload.tipo)
-    .bind(&payload.estoque_atual)
-    .bind(payload.estoque_minimo)
+    .bind(&nome)
+    .bind(&descricao)
+    .bind(preco)
+    .bind(&image_url)
+    .bind(&tipo)
+    .bind(estoque_atual)
+    .bind(estoque_minimo)
     .fetch_one(&pool)
     .await;
 
     match result {
-        Ok(item) => {
-            let response = ApiResponse {
-                message: "Item created successfuly".to_string(),
-                data: Some(item),
-            };
-            (StatusCode::CREATED, Json(response))
-        },
-        Err(e) => {
-            let response = ApiResponse {
-                message: format!("Failed to create item: {}", e),
-                data: None,
-            };
-            (StatusCode::BAD_REQUEST, Json(response))
-        }
+        Ok(item) => (StatusCode::CREATED, Json(ApiResponse {
+            message: "Item created successfully".to_string(),
+            data: Some(item),
+        })),
+        Err(e) => (StatusCode::BAD_REQUEST, Json(ApiResponse {
+            message: format!("Failed to create item: {}", e),
+            data: None,
+        }))
     }
 }
-
 //GET ALL
 pub async fn get_all_items(State(pool): State<PgPool>) -> (StatusCode, Json<ApiResponse<Vec<ItemResponse>>>) {
     let result = sqlx::query_as::<_, ItemResponse> (
