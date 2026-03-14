@@ -1,6 +1,6 @@
 use axum::{Json, extract::{Path, State}, http::StatusCode};
 use sqlx::PgPool;
-use crate::models::item::{CreateItemRequest, UpdateItemRequest, ItemResponse};
+use crate::models::item::{ItemResponse};
 use crate::response::ApiResponse;
 use axum::extract::Multipart;
 use crate::middleware::upload_middleware::extract_image;
@@ -32,9 +32,9 @@ pub async fn create_item(
     }
 
     let result = sqlx::query_as::<_, ItemResponse>(
-        "INSERT INTO items (nome, descricao, preco, image_url, tipo, estoque atual, estoque_minimo)
+        "INSERT INTO items (nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
-        RETURNING id, nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo)"
+        RETURNING id, nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo, updated_at, updated_by"
     )
     .bind(&nome)
     .bind(&descricao)
@@ -135,73 +135,79 @@ pub async fn get_item_by_id(State(pool): State<PgPool>, Path(id): Path<i32>) -> 
 }
 
 // UPDATE
-pub async fn update_item(State(pool): State<PgPool>, Path(id): Path<i32>, Json(payload): Json<UpdateItemRequest>) -> (StatusCode, Json<ApiResponse<ItemResponse>>) {
+pub async fn update_item(
+    State(pool): State<PgPool>,
+    Path(id): Path<i32>,
+    mut multipart: Multipart
+) -> (StatusCode, Json<ApiResponse<ItemResponse>>) {
 
-    // Busca item atual
-    let current = sqlx::query_as::<_, ItemResponse>(
-        "SELECT id, nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo, updated_at, updated_by
-        FROM items WHERE id = $1"
+    //Busca item atual
+    let current = sqlx::query_as::<_, ItemResponse> (
+        "SELECT id, nome, preco, descricao, image_url, tipo, estoque_atual, estoque_minimo, updated_at, updated_by
+            FROM items WHERE id = $1"
     )
     .bind(id)
     .fetch_one(&pool)
     .await;
 
-    let current_item = match current {
+    let current_item = match current{
         Ok(item) => item,
-        Err(e) => {
-            let response = ApiResponse {
-                message: format!("Item not found: {e}"),
-                data: None,
-            };
-            return (StatusCode::NOT_FOUND, Json(response));
-        }
+        Err(e) => return (StatusCode::NOT_FOUND, Json(ApiResponse {
+            message: format!("Item not foudn: {e}"),
+            data: None,
+        })),
     };
 
-    // Atualiza campos (usa valor novo ou mantém atual)
-    let new_nome = payload.nome.unwrap_or(current_item.nome);
-    let new_descricao = payload.descricao.or(current_item.descricao);
-    let new_preco = payload.preco.unwrap_or(current_item.preco);
-    let new_image_url = payload.image_url.or(current_item.image_url);
-    let new_tipo = payload.tipo.or(current_item.tipo);
-    let new_estoque_atual = payload.estoque_atual.unwrap_or(current_item.estoque_atual);
-    let new_estoque_minimo = payload.estoque_minimo.unwrap_or(current_item.estoque_minimo);
+    // Inicia com os valores atuais do banco
+    let mut nome = current_item.nome.clone();
+    let mut descricao = current_item.descricao.clone();
+    let mut preco = current_item.preco;
+    let mut tipo = current_item.tipo.clone();
+    let mut estoque_atual = current_item.estoque_atual;
+    let mut estoque_minimo = current_item.estoque_minimo;
+    let mut image_url = current_item.image_url.clone();
+
+    while let Some(field) = multipart.next_field().await.unwrap_or(None) {
+        match field.name().unwrap_or("") {
+            "nome" => nome = field.text().await.unwrap_or(nome.clone()),
+            "descricao" => descricao = Some(field.text().await.unwrap_or_default()),
+            "preco" => preco = field.text().await.unwrap_or_default().parse().unwrap_or(preco),
+            "tipo" => tipo = Some(field.text().await.unwrap_or_default()),
+            "estoque_atual" => estoque_atual = field.text().await.unwrap_or_default().parse().unwrap_or(estoque_atual),
+            "estoque_minimo" => estoque_minimo = field.text().await.unwrap_or_default().parse().unwrap_or(estoque_minimo),
+            // Troca imagem apenas se enviar uma nova
+            "image" => if let Some(url) = extract_image(field).await { image_url = Some(url); },
+            _ => {}
+        }
+    }
 
     let result = sqlx::query_as::<_, ItemResponse>(
         "UPDATE items
-        SET nome = $1, descricao = $2, preco = $3, image_url = $4, tipo = $5, estoque_minimo = $7, updated_at = NOW()
+        SET nome = $1, descricao = $2, preco = $3, image_url = $4, tipo = $5, estoque_atual = $6, estoque_minimo = $7, updated_at = NOW()
         WHERE id = $8
         RETURNING id, nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo, updated_at, updated_by"
     )
-    .bind(&new_nome)
-    .bind(&new_descricao)
-    .bind(new_preco)
-    .bind(&new_image_url)
-    .bind(&new_tipo)
-    .bind(new_estoque_atual)
-    .bind(new_estoque_minimo)
-    .bind(id)
+    .bind(&nome)
+    .bind(&descricao)
+    .bind(preco)
+    .bind(&image_url)
+    .bind(&tipo)
+    .bind(&estoque_atual)
+    .bind(&estoque_minimo)
+    .bind(&id)
     .fetch_one(&pool)
     .await;
 
     match result {
-        Ok(item) => {
-            let response = ApiResponse {
-                message: "Item updated successfuly".to_string(),
-                data: Some(item)
-            };
-            (StatusCode::OK, Json(response))
-        },
-        Err(e) => {
-            let response = ApiResponse {
-                message: format!("Failed to update item: {}", e),
-                data: None 
-            };
-            (StatusCode::BAD_REQUEST, Json(response))
-        }
+        Ok(item) => (StatusCode::OK, Json(ApiResponse { 
+            message: "Item updated successfully".to_string(), data: Some(item),
+        })),
+        Err(e) => (StatusCode::BAD_REQUEST, Json(ApiResponse {
+            message: format!("Failed to update item: {}", e),
+            data: None
+        }))
     }
-
 }
-
 // DELETE
 pub async fn delete_item(
     State(pool) : State<PgPool>,
