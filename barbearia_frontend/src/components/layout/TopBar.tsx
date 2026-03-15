@@ -7,7 +7,7 @@ import logo from './../../assets/logo.png';
 
 export function TopBar() {
   const user = useAuthStore((state) => state.user);
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const checkAuth = useAuthStore((state) => state.checkAuth);
   const logout = useAuthStore((state) => state.logout);
 
@@ -21,7 +21,7 @@ export function TopBar() {
         <img src={logo}></img>
       </div>
       <div className={styles.auth}>
-        {isLoggedIn ? (
+        {isAuthenticated ? (
           <FontAwesomeIcon
             className={styles.icon}
             icon={faSignOutAlt}

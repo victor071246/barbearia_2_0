@@ -9,7 +9,6 @@ export interface User {
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
-  isLoggedIn: boolean;
 
   checkAuth: () => Promise<void>;
   login: (username: string, password: string) => Promise<void>;
@@ -20,13 +19,11 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   isAuthenticated: false,
-  isLoggedIn: false,
 
   checkAuth: async () => {
     try {
-      const { data } = await api.get('/auth/me');
-
-      set({ user: data, isAuthenticated: true });
+      await api.get('/auth/verifty');
+      set({ isAuthenticated: true });
     } catch {
       set({ user: null, isAuthenticated: false });
     }
@@ -35,7 +32,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   login: async (username, password) => {
     await api.post('/auth/login', { username, password });
 
-    const { data } = await api.get('/auth/me');
+    const { data } = await api.get('/auth/verify');
 
     set({ user: data, isAuthenticated: true });
   },
@@ -43,7 +40,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   register: async (username, password) => {
     await api.post('/auth/register', { username, password });
 
-    const { data } = await api.get('/auth/me');
+    const { data } = await api.get('/auth/verify');
 
     set({ user: data, isAuthenticated: true });
   },
