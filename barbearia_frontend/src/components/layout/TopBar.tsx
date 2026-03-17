@@ -1,15 +1,16 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import { useAuthStore, type User } from '../../store/authStore';
+import { useAuthStore } from '../../store/authStore';
+import { LoginPanel } from './LoginPanel';
 import styles from './TopBar.module.css';
 import logo from './../../assets/logo.png';
 
 export function TopBar() {
-  const user = useAuthStore((state) => state.user);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const checkAuth = useAuthStore((state) => state.checkAuth);
   const logout = useAuthStore((state) => state.logout);
+  const [loginOpen, setLoginOpen] = useState(false);
 
   useEffect(() => {
     checkAuth();
@@ -25,14 +26,21 @@ export function TopBar() {
           <FontAwesomeIcon
             className={styles.icon}
             icon={faSignOutAlt}
+            onClick={() => logout()}
           ></FontAwesomeIcon>
         ) : (
           <FontAwesomeIcon
-            icon={faSignInAlt}
             className={styles.icon}
+            icon={faSignInAlt}
+            onClick={() => setLoginOpen(true)}
           ></FontAwesomeIcon>
         )}
       </div>
+
+      <LoginPanel
+        isOpen={loginOpen}
+        onClose={() => setLoginOpen(false)}
+      ></LoginPanel>
     </div>
   );
 }
