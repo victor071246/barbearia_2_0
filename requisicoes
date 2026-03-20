@@ -1,0 +1,4 @@
+curl -X POST http://localhost:3000/users -H "Content-Type: application/json" -d '{"username": "admin1", "email": "admin1@barbearia.com", "password": "senhaadmin123@"}'
+
+admin1
+senhaadmin123@

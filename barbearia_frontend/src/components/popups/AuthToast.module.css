@@ -1,0 +1,56 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  animation: fadeIn 0.3s ease;
+}
+
+.popup {
+  position: relative;
+  background: #1a1a1a;
+  border: 1px solid #56544b;
+  padding: 4dvh 6dvw;
+  outline: 2px solid #56544b;
+  outline-offset: 4px;
+}
+.popup::before,
+.popup::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: #c8a96e;
+  border-style: solid;
+}
+
+.popup::before {
+  top: -4px;
+  left: -4px;
+  border-width: 2px 0 0 2px;
+}
+
+.popup::after {
+  bottom: -4px;
+  right: -4px;
+  border-width: 0 2px 2px 0;
+}
+
+.text {
+  color: #c8a96e;
+  font-size: 2dvh;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

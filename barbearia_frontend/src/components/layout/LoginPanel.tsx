@@ -14,10 +14,12 @@ export function LoginPanel({ isOpen, onClose }: LoginPanelProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
 
   const handleLogin = async () => {
     try {
       await login(username, password);
+      setSuccess(true);
       onClose();
     } catch {
       setError('Usuário ou senha inválidos');
@@ -52,6 +54,9 @@ export function LoginPanel({ isOpen, onClose }: LoginPanelProps) {
           onChange={(e) => setPassword(e.target.value)}
         ></input>
 
+        {success && (
+          <span className={styles.success}>Login realizado com sucesso!</span>
+        )}
         {error && <span className={styles.error}>{error}</span>}
         <button className={styles.button} onClick={handleLogin}>
           Entrar

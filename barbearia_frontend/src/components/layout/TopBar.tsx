@@ -5,12 +5,15 @@ import { useAuthStore } from '../../store/authStore';
 import { LoginPanel } from './LoginPanel';
 import styles from './TopBar.module.css';
 import logo from './../../assets/logo.png';
+import { AuthToast } from '../popups/AuthToast';
 
 export function TopBar() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const checkAuth = useAuthStore((state) => state.checkAuth);
   const logout = useAuthStore((state) => state.logout);
   const [loginOpen, setLoginOpen] = useState(false);
+  const showToast = useAuthStore((state) => state.showToast);
+  const setShowToast = useAuthStore((state) => state.setShowToast);
 
   useEffect(() => {
     checkAuth();
@@ -41,6 +44,10 @@ export function TopBar() {
         isOpen={loginOpen}
         onClose={() => setLoginOpen(false)}
       ></LoginPanel>
+      <AuthToast
+        show={showToast}
+        onDone={() => setShowToast(false)}
+      ></AuthToast>
     </div>
   );
 }

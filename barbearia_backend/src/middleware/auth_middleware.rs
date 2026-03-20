@@ -13,7 +13,6 @@ use crate::response::ApiResponse;
 pub struct Claims {
     pub sub: String, // user_id
     pub exp: usize,  // expiration
-    pub role: String // "admin" ou "user"
 }
 
 pub async fn auth_middleware(

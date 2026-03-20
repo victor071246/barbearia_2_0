@@ -9,6 +9,8 @@ export interface User {
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
+  showToast: boolean;
+  setShowToast: (value: boolean) => void;
 
   checkAuth: () => Promise<void>;
   login: (username: string, password: string) => Promise<void>;
@@ -19,11 +21,11 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   isAuthenticated: false,
-
+  showToast: false,
+  setShowToast: (value) => set({ showToast: value }),
   checkAuth: async () => {
     try {
-      await api.get('/auth/verifty');
-      set({ isAuthenticated: true });
+      await api.get('/auth/verify');
     } catch {
       set({ user: null, isAuthenticated: false });
     }
