@@ -39,6 +39,7 @@ export function LoginPanel({ isOpen, onClose }: LoginPanelProps) {
         <input
           className={styles.input}
           type="text"
+          placeholder="Usuário"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         ></input>
