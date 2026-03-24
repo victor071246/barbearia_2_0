@@ -1,7 +1,8 @@
 .container {
-  width: 100%;
+  width: 100dvw;
   min-height: 76dvh;
   background: #1a1a1a;
+  box-sizing: border-box;
   padding: 3dvh 4dvw;
   display: flex;
   flex-direction: column;

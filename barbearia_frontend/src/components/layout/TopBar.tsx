@@ -16,7 +16,11 @@ export function TopBar() {
   const setShowToast = useAuthStore((state) => state.setShowToast);
 
   useEffect(() => {
-    checkAuth();
+    try {
+      checkAuth();
+    } catch (e) {
+      console.log(e);
+    }
   }, [checkAuth]);
 
   return (

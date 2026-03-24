@@ -25,7 +25,9 @@ export const useAuthStore = create<AuthState>((set) => ({
   setShowToast: (value) => set({ showToast: value }),
   checkAuth: async () => {
     try {
-      await api.get('/auth/verify');
+      const response = await api.get('/auth/verify');
+      set({ isAuthenticated: true, showToast: true });
+      console.log(response);
     } catch {
       set({ user: null, isAuthenticated: false });
     }
@@ -33,10 +35,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   login: async (username, password) => {
     await api.post('/auth/login', { username, password });
-
-    const { data } = await api.get('/auth/verify');
-
-    set({ user: data, isAuthenticated: true });
+    set({ isAuthenticated: true, showToast: true });
   },
 
   register: async (username, password) => {

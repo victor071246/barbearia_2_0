@@ -29,7 +29,9 @@ export function NavBar() {
         to="/contato"
         className={`${currentPage === 'contact' ? `${styles.navbar_select_box} ${styles.active}` : ''} ${styles.navbar_select_box}`}
         onClick={() => setPage('contact')}
-      ></Link>
+      >
+        Contato
+      </Link>
     </nav>
   );
 }
