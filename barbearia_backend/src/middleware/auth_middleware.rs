@@ -11,7 +11,7 @@ use crate::response::ApiResponse;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Claims {
-    pub sub: String, // user_id
+    pub sub: i32, // user_id
     pub exp: usize,  // expiration
 }
 

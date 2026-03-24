@@ -34,5 +34,5 @@ pub async fn extract_image(field: Field<'_>) -> Option<String> {
     fs::write(&path, &bytes).await.ok()?;
 
     // Retorna a URL pública do arquivo
-    Some(format! ("/uploads/items/{}", file_name))
+    Some(format! ("http://localhost:3000/uploads/items/{}", file_name))
 }

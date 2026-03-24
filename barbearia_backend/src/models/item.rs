@@ -1,3 +1,4 @@
+use sqlx::types::Decimal;
 use serde::{Deserialize, Serialize};
 use chrono::{DateTime, Utc};
 
@@ -6,7 +7,7 @@ pub struct Item{
     pub id: i32,
     pub nome: String,
     pub descricao: Option<String>,
-    pub preco: f64,
+    pub preco: Decimal,
     pub image_url: Option<String>,
     pub tipo: Option<String>,
     pub estoque_atual: i32,
@@ -19,7 +20,7 @@ pub struct Item{
 pub struct CreateItemRequest {
     pub nome: String,
     pub descricao: Option<String>,
-    pub preco: f64,
+    pub preco: Decimal,
     pub image_url: Option<String>,
     pub tipo: Option<String>,
     pub estoque_atual: i32,
@@ -30,7 +31,7 @@ pub struct CreateItemRequest {
 pub struct UpdateItemRequest {
     pub nome: Option<String>,
     pub descricao: Option<String>,
-    pub preco: Option<f64>,
+    pub preco: Option<Decimal>,
     pub image_url: Option<String>,
     pub tipo: Option<String>,
     pub estoque_atual: Option<i32>,
@@ -42,7 +43,7 @@ pub struct ItemResponse {
     pub id: i32,
     pub nome: String,
     pub descricao: Option<String>,
-    pub preco: f64,
+    pub preco: Decimal,
     pub image_url: Option<String>,
     pub tipo: Option<String>,
     pub estoque_atual: i32,

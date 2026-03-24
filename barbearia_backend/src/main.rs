@@ -5,7 +5,7 @@ mod routes;
 mod db;
 mod middleware;
 
-use tower_http::cors::{CorsLayer, Any};
+use tower_http::{cors::{CorsLayer, Any}, services::ServeDir};
 use axum::{Router, http::{Method, header::{AUTHORIZATION, CONTENT_TYPE, COOKIE}}};
 use routes::{user_routes::user_routes, item_routes::item_routes, auth_routes::auth_routes};
 
@@ -28,11 +28,16 @@ async fn main() {
     .merge(auth_routes(pool.clone()))
     .merge(item_routes(pool.clone()))
     .merge(health_routes(pool.clone()))
+    .nest_service("/uploads", ServeDir::new("uploads"))
     .layer(cors);
+
+
+
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000").await.unwrap();
 
     println!("Server running on http://127.0.0.1:3000");
 
     axum::serve(listener, app).await.unwrap();
+    
 }
