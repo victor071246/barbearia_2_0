@@ -1,0 +1,205 @@
+/* ── Card ── */
+.card {
+  position: relative;
+  background: #2d2d2d;
+  border: 1px solid #444;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.editing {
+  border-color: #56544b;
+  box-shadow: 0 0 12px rgba(86, 84, 75, 0.3);
+}
+/* ── Imagem ── */
+.imagem {
+  width: 100%;
+  height: 25dvh;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+  display: block;
+}
+/* ── Info ── */
+.info {
+  padding: 1.5dvh 1.5dvw;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6dvh;
+}
+.info h3 {
+  color: #fff;
+  font-size: 1.8dvh;
+  margin: 0;
+}
+.info p {
+  color: #aaa;
+  font-size: 1.5dvh;
+  margin: 0;
+}
+/* ── Orelha lateral direita com o lápis ── */
+.editIcon {
+  position: absolute;
+  right: -4dvw;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #2d2d2d;
+  border: 1px solid #444;
+  border-left: none;
+  border-radius: 0 50px 50px 0;
+  width: 4dvw;
+  height: 8dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.editIcon:hover {
+  background: #363636;
+}
+.editIcon svg {
+  color: #fff;
+  font-size: 1.8dvh;
+}
+/* ── Botões salvar/cancelar ── */
+.editActions {
+  position: absolute;
+  right: -4dvw;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #2d2d2d;
+  border: 1px solid #444;
+  border-left: none;
+  border-radius: 0 50px 50px 0;
+  width: 4dvw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1dvh;
+  padding: 1.5dvh 0;
+}
+.saveIcon {
+  cursor: pointer;
+  color: #4caf50;
+  font-size: 1.8dvh;
+  transition: transform 0.2s ease;
+}
+.saveIcon:hover {
+  transform: scale(1.2);
+}
+.saveIcon:active {
+  animation: pulse 0.2s ease;
+}
+.cancelIcon {
+  cursor: pointer;
+  color: #ff6b6b;
+  font-size: 1.8dvh;
+  transition: transform 0.2s ease;
+}
+.cancelIcon:hover {
+  transform: scale(1.2);
+}
+.cancelIcon:active {
+  animation: pulse 0.2s ease;
+}
+/* ── Inputs ── */
+.input {
+  background: #111;
+  border: 1px solid #444;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 1.6dvh;
+  padding: 1dvh 1.2dvh;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+  animation: fadeSlideIn 0.2s ease forwards;
+}
+.input:focus {
+  border-color: #56544b;
+}
+.textarea {
+  resize: vertical;
+  min-height: 6dvh;
+}
+.inputRow {
+  display: flex;
+  gap: 1dvw;
+}
+/* ── Área de imagem no modo edição ── */
+.imageEdit {
+  position: relative;
+  width: 100%;
+  height: 25dvh;
+  background: #111;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  animation: fadeSlideIn 0.25s ease forwards;
+}
+.imagePreview {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.4;
+}
+.imageEditLabel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8dvh;
+  color: #aaa;
+  font-size: 1.5dvh;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+}
+.imageEditLabel svg {
+  font-size: 3dvh;
+}
+.fileInput {
+  display: none;
+}
+/* ── Spinner ── */
+.input[type='number']::-webkit-inner-spin-button,
+.input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+.input[type='number'] {
+  -moz-appearance: textfield;
+}
+/* ── Animações ── */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

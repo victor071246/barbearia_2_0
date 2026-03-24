@@ -38,8 +38,8 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
       form.append('nome', nome);
       form.append('descricao', descricao);
       form.append('preco', preco);
-      form.append('estoque_atual', String(item.estoque_atual));
-      form.append('estoque_minimo', String(item.estoque_minimo));
+      form.append('estoque_atual', estoqueAtual);
+      form.append('estoque_minimo', estoqueMinimo);
       if (item.tipo) form.append('tipo', item.tipo);
       if (imagem) form.append('image', imagem);
 
@@ -86,13 +86,27 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
         </div>
       )}
       {editing ? (
-        <div className={styles.imageEdit}>
+        <div
+          className={styles.imageEdit}
+          onClick={(e) =>
+            (
+              e.currentTarget.querySelector(
+                'input[type="file"]',
+              ) as HTMLInputElement
+            )?.click()
+          }
+        >
+          {item.image_url && (
+            <img src={item.image_url} alt="" className={styles.imagePreview} />
+          )}
+          <span className={styles.imageEditLabel}>Trocar foto</span>
           <input
+            id={'fileInput-' + item.id}
             type="file"
             accept="image/*"
             className={styles.fileInput}
             onChange={(e) => setImagem(e.target.files?.[0] ?? null)}
-          ></input>
+          />
         </div>
       ) : (
         item.image_url && (

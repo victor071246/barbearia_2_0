@@ -78,7 +78,7 @@ export function ItemsPage() {
             key={item.id}
             item={item}
             isAuthenticated={isAuthenticated}
-            onUpdated={refetch()}
+            onUpdated={refetch}
           ></ItemCard>
         ))}
       </div>
