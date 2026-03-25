@@ -47,13 +47,13 @@ export function ItemsPage() {
   return (
     <div className={styles.container}>
       <div className={styles.filtros}>
-        {['todos', 'servico', 'produto'].map((categoria) => (
+        {['todos', 'servico', 'produto'].map((cat) => (
           <button
-            key={categoria}
-            className={`${styles.filtro} ${categoria === categoria ? styles.ativo : ''}`}
-            onClick={() => setCategoria(categoria)}
+            key={cat}
+            className={`${styles.filtro} ${cat === categoria ? styles.ativo : ''}`}
+            onClick={() => setCategoria(cat)}
           >
-            {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
+            {cat.charAt(0).toUpperCase() + cat.slice(1)}
           </button>
         ))}
       </div>
@@ -67,9 +67,7 @@ export function ItemsPage() {
       <CreateItemModal
         isOpen={createOpen}
         onClose={() => setCreateOpen(false)}
-        onCreated={() => {
-          setCategoria('todos'); // força refetch
-        }}
+        onCreated={refetch}
       />
 
       <div className={styles.grid}>

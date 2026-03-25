@@ -31,6 +31,7 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
   const [estoqueMinimo, setEstoqueMinimo] = useState(
     String(item.estoque_minimo),
   );
+  const [tipo, setTipo] = useState(item.tipo ?? 'produto');
 
   const handleSave = async () => {
     try {
@@ -40,7 +41,7 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
       form.append('preco', preco);
       form.append('estoque_atual', estoqueAtual);
       form.append('estoque_minimo', estoqueMinimo);
-      if (item.tipo) form.append('tipo', item.tipo);
+      form.append('tipo', tipo);
       if (imagem) form.append('image', imagem);
 
       await api.put(`/items/${item.id}`, form, {
@@ -60,6 +61,7 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
     setPreco(String(item.preco));
     setImagem(null);
     setEditing(false);
+    setTipo(item.tipo ?? 'produto');
   };
 
   return (
@@ -149,6 +151,14 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
               value={estoqueMinimo}
               onChange={(e) => setEstoqueMinimo(e.target.value)}
             ></input>
+            <select
+              className={styles.input}
+              value={tipo}
+              onChange={(e) => setTipo(e.target.value)}
+            >
+              <option value="produto">Produto</option>
+              <option value="servico">Serviço</option>
+            </select>
           </>
         ) : (
           <>

@@ -12,6 +12,7 @@
 .filtros {
   display: flex;
   gap: 1dvw;
+  justify-content: center;
 }
 
 .filtro {
