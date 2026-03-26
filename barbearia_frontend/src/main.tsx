@@ -5,6 +5,7 @@ import { NavBar } from './components/layout/NavBar';
 import { Home } from './pages/Home';
 import { ItemsPage } from './pages/ItemsPage';
 import { ContactPage } from './pages/ContactPage';
+import { RouteProgress } from './components/popups/RoutePogress';
 import { StrictMode } from 'react';
 import './index.css';
 import { Footer } from './components/layout/Footer';
@@ -12,6 +13,7 @@ import { Footer } from './components/layout/Footer';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
+      <RouteProgress />
       <TopBar />
       <NavBar />
       <Routes>

@@ -1,3 +1,13 @@
 body {
   margin: 0;
 }
+#nprogress .bar {
+  background: #c8a96e;
+  height: 2px;
+}
+
+#nprogress .peg {
+  box-shadow:
+    0 0 10px #c8a96e,
+    0 0 5px #c8a96e;
+}
