@@ -13,7 +13,8 @@ pub struct Item{
     pub estoque_atual: i32,
     pub estoque_minimo: i32,
     pub updated_at: Option<DateTime<Utc>>,
-    pub updated_by: Option<i32>
+    pub updated_by: Option<i32>,
+    pub link_pagamento: Option<String>
 }
 
 #[derive(Deserialize)]
@@ -25,6 +26,7 @@ pub struct CreateItemRequest {
     pub tipo: Option<String>,
     pub estoque_atual: i32,
     pub estoque_minimo: i32,
+    pub link_pagamento: Option<String>
 }
 
 #[derive(Deserialize)]
@@ -36,6 +38,7 @@ pub struct UpdateItemRequest {
     pub tipo: Option<String>,
     pub estoque_atual: Option<i32>,
     pub estoque_minimo: Option<i32>,
+    pub link_pagamento: Option<String>
 }
 
 #[derive(Serialize, sqlx::FromRow)]
@@ -49,5 +52,6 @@ pub struct ItemResponse {
     pub estoque_atual: i32,
     pub estoque_minimo: i32,
     pub updated_at: Option<DateTime<Utc>>,
-    pub updated_by: Option<i32>
+    pub updated_by: Option<i32>,
+    pub link_pagamento: Option<String>
 }

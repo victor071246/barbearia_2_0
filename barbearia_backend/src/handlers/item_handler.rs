@@ -17,6 +17,7 @@ pub async fn create_item(
     let mut estoque_atual: i32 = 0;
     let mut estoque_minimo: i32 = 0;
     let mut image_url: Option<String> = None;
+    let mut link_pagamento: Option<String> = None;
 
     while let Some(field) = multipart.next_field().await.unwrap_or(None) {
         match field.name().unwrap_or(""){
@@ -27,14 +28,15 @@ pub async fn create_item(
             "estoque_atual" => estoque_atual = field.text().await.unwrap_or_default().parse().unwrap_or(0),
             "estoque_minimo" => estoque_minimo = field.text().await.unwrap_or_default().parse().unwrap_or(0),
             "image" => image_url = extract_image(field).await,
+            "link_pagamento" => link_pagamento = Some(field.text().await.unwrap_or_default()),
             _ => {}
         }
     }
 
     let result = sqlx::query_as::<_, ItemResponse>(
-        "INSERT INTO items (nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-        RETURNING id, nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo, updated_at, updated_by"
+        "INSERT INTO items (nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo, link_pagamento)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        RETURNING id, nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo, updated_at, updated_by, link_pagamento"
     )
     .bind(&nome)
     .bind(&descricao)
@@ -43,6 +45,7 @@ pub async fn create_item(
     .bind(&tipo)
     .bind(estoque_atual)
     .bind(estoque_minimo)
+    .bind(&link_pagamento)
     .fetch_one(&pool)
     .await;
 
@@ -60,7 +63,7 @@ pub async fn create_item(
 //GET ALL
 pub async fn get_all_items(State(pool): State<PgPool>) -> (StatusCode, Json<ApiResponse<Vec<ItemResponse>>>) {
     let result = sqlx::query_as::<_, ItemResponse> (
-        "SELECT id, nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo, updated_at, updated_by
+        "SELECT id, nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo, updated_at, updated_by, link_pagamento
         FROM items"
     )
     .fetch_all(&pool)
@@ -86,7 +89,7 @@ pub async fn get_all_items(State(pool): State<PgPool>) -> (StatusCode, Json<ApiR
 
 pub async fn get_items_by_category( State(pool): State<PgPool>, Path(category): Path<String>) -> (StatusCode, Json<ApiResponse<Vec<ItemResponse>>>) {
     let result = sqlx::query_as::<_, ItemResponse>(
-        "SELECT id, nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo, updated_at, updated_by FROM items WHERE tipo = $1"
+        "SELECT id, nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo, updated_at, updated_by, link_pagamento FROM items WHERE tipo = $1"
     ).bind(&category).fetch_all(&pool).await;
 
     match result {
@@ -110,7 +113,7 @@ pub async fn get_items_by_category( State(pool): State<PgPool>, Path(category): 
 //GET ONE
 pub async fn get_item_by_id(State(pool): State<PgPool>, Path(id): Path<i32>) -> (StatusCode, Json<ApiResponse<ItemResponse>>) {
     let result = sqlx::query_as::<_, ItemResponse>(
-        "SELECT id, nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo, updated_at, updated_by FROM items WHERE id = $1"
+        "SELECT id, nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo, updated_at, updated_by, link_pagamento FROM items WHERE id = $1"
     )
     .bind(id)
     .fetch_one(&pool)
@@ -143,7 +146,7 @@ pub async fn update_item(
 
     //Busca item atual
     let current = sqlx::query_as::<_, ItemResponse> (
-        "SELECT id, nome, preco, descricao, image_url, tipo, estoque_atual, estoque_minimo, updated_at, updated_by
+        "SELECT id, nome, preco, descricao, image_url, tipo, estoque_atual, estoque_minimo, updated_at, updated_by, link_pagamento
             FROM items WHERE id = $1"
     )
     .bind(id)
@@ -153,7 +156,7 @@ pub async fn update_item(
     let current_item = match current{
         Ok(item) => item,
         Err(e) => return (StatusCode::NOT_FOUND, Json(ApiResponse {
-            message: format!("Item not foudn: {e}"),
+            message: format!("Item not found: {e}"),
             data: None,
         })),
     };
@@ -166,6 +169,7 @@ pub async fn update_item(
     let mut estoque_atual = current_item.estoque_atual;
     let mut estoque_minimo = current_item.estoque_minimo;
     let mut image_url = current_item.image_url.clone();
+    let mut link_pagamento = current_item.link_pagamento.clone();
 
     while let Some(field) = multipart.next_field().await.unwrap_or(None) {
         match field.name().unwrap_or("") {
@@ -177,15 +181,16 @@ pub async fn update_item(
             "estoque_minimo" => estoque_minimo = field.text().await.unwrap_or_default().parse().unwrap_or(estoque_minimo),
             // Troca imagem apenas se enviar uma nova
             "image" => if let Some(url) = extract_image(field).await { image_url = Some(url); },
+            "link_pagamento" => link_pagamento = Some(field.text().await.unwrap_or_default()),
             _ => {}
         }
     }
 
     let result = sqlx::query_as::<_, ItemResponse>(
         "UPDATE items
-        SET nome = $1, descricao = $2, preco = $3, image_url = $4, tipo = $5, estoque_atual = $6, estoque_minimo = $7, updated_at = NOW()
-        WHERE id = $8
-        RETURNING id, nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo, updated_at, updated_by"
+        SET nome = $1, descricao = $2, preco = $3, image_url = $4, tipo = $5, estoque_atual = $6, estoque_minimo = $7, link_pagamento = $8, updated_at = NOW()
+        WHERE id = $9
+        RETURNING id, nome, descricao, preco, image_url, tipo, estoque_atual, estoque_minimo, updated_at, updated_by, link_pagamento"
     )
     .bind(&nome)
     .bind(&descricao)
@@ -194,6 +199,7 @@ pub async fn update_item(
     .bind(&tipo)
     .bind(&estoque_atual)
     .bind(&estoque_minimo)
+    .bind(&link_pagamento)
     .bind(&id)
     .fetch_one(&pool)
     .await;
