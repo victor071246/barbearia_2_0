@@ -4,6 +4,7 @@ import { api } from '../api/client';
 import { CreateItemModal } from '../components/popups/CreateItemModal';
 import { ItemCard } from '../components/layout/ItemCard';
 import styles from './ItemsPage.module.css';
+import { useNavigationStore } from '../store/navigationStore';
 
 interface Item {
   id: number;
@@ -14,13 +15,15 @@ interface Item {
   tipo: string | null;
   estoque_atual: number;
   estoque_minimo: number;
+  link_pagamento: string | null;
 }
 
 export function ItemsPage() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const [items, setItems] = useState<Item[]>([]);
-  const [categoria, setCategoria] = useState<string>('todos');
   const [createOpen, setCreateOpen] = useState(false);
+  const categoria = useNavigationStore((state) => state.categoria);
+  const setCategoria = useNavigationStore((state) => state.setCategoria);
 
   useEffect(() => {
     const fetchItems = async () => {

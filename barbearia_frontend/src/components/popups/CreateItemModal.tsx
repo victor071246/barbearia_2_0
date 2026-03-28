@@ -22,6 +22,7 @@ export function CreateItemModal({
   const [estoqueAtual, setEstoqueAtual] = useState('');
   const [estoqueMinimo, setEstoqueMinimo] = useState('');
   const [imagem, setImagem] = useState<File | null>(null);
+  const [linkPagamento, setLinkPagamento] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = async () => {
@@ -33,6 +34,7 @@ export function CreateItemModal({
       form.append('tipo', tipo);
       form.append('estoque_atual', estoqueAtual);
       form.append('estoque_minimo', estoqueMinimo);
+      form.append('link_pagamento', linkPagamento);
       if (imagem) form.append('image', imagem);
 
       await api.post('/items', form, {
@@ -101,6 +103,12 @@ export function CreateItemModal({
           value={estoqueMinimo}
           onChange={(e) => setEstoqueMinimo(e.target.value)}
         />
+        <input
+          className={styles.input}
+          placeholder="Link extero"
+          value={linkPagamento}
+          onChange={(e) => setLinkPagamento(e.target.value)}
+        ></input>
 
         <input
           className={styles.input}

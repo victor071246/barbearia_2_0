@@ -13,6 +13,7 @@ interface Item {
   tipo: string | null;
   estoque_atual: number;
   estoque_minimo: number;
+  link_pagamento: string | null;
 }
 
 interface ItemCardProps {
@@ -32,6 +33,7 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
     String(item.estoque_minimo),
   );
   const [tipo, setTipo] = useState(item.tipo ?? 'produto');
+  const [linkPagamento, setLinkPagamento] = useState(item.link_pagamento ?? '');
 
   const handleSave = async () => {
     try {
@@ -42,6 +44,7 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
       form.append('estoque_atual', estoqueAtual);
       form.append('estoque_minimo', estoqueMinimo);
       form.append('tipo', tipo);
+      form.append('link_pagamento', linkPagamento);
       if (imagem) form.append('image', imagem);
 
       await api.put(`/items/${item.id}`, form, {
@@ -62,6 +65,7 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
     setImagem(null);
     setEditing(false);
     setTipo(item.tipo ?? 'produto');
+    setLinkPagamento(item.link_pagamento ?? '');
   };
 
   return (
@@ -159,6 +163,11 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
               <option value="produto">Produto</option>
               <option value="servico">Serviço</option>
             </select>
+            <input
+              className={styles.input}
+              placeholder={linkPagamento}
+              onChange={(e) => setLinkPagamento(e.target.value)}
+            ></input>
           </>
         ) : (
           <>
@@ -166,7 +175,27 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
             <p>R$ {Number(item.preco).toFixed(2)}</p>
             {item.descricao && <p>{item.descricao}</p>}
             <p>Estoque: {item.estoque_atual}</p>
-            <p>Mínimo: {item.estoque_minimo}</p>
+            <p>Estoque Mínimo: {item.estoque_minimo}</p>
+            {item.tipo === 'servico' ? (
+              <button
+                className={styles.btnAgendar}
+                onClick={() =>
+                  item.link_pagamento &&
+                  window.open(item.link_pagamento, '_blank')
+                }
+              >
+                Agendar
+              </button>
+            ) : (
+              <button
+                className={styles.btnComprar}
+                onClick={() =>
+                  item.link_pagamento && window.open(item.link_pagamento)
+                }
+              >
+                Comprar
+              </button>
+            )}
           </>
         )}
       </div>

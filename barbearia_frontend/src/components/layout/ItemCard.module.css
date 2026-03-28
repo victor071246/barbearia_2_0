@@ -209,3 +209,32 @@
     transform: scale(1);
   }
 }
+
+.btnAgendar,
+.btnComprar {
+  background: #fff;
+  color: #111;
+  border: none;
+  border-radius: 6px;
+  padding: 1dvh 1.5dvw;
+  font-size: 1.5dvh;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 0.5dvh;
+  letter-spacing: 0.05em;
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+}
+
+.btnAgendar:hover,
+.btnComprar:hover {
+  background: #e0e0e0;
+  transform: translateY(-1px);
+}
+
+.btnAgendar:active,
+.btnComprar:active {
+  transform: translateY(0);
+}
