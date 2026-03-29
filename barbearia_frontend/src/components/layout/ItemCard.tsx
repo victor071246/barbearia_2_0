@@ -174,8 +174,7 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
             <h3>{item.nome}</h3>
             <p>R$ {Number(item.preco).toFixed(2)}</p>
             {item.descricao && <p>{item.descricao}</p>}
-            <p>Estoque: {item.estoque_atual}</p>
-            <p>Estoque Mínimo: {item.estoque_minimo}</p>
+            {item.tipo === 'prouto' && <p>Estoque: {item.estoque_atual}</p>}
             {item.tipo === 'servico' ? (
               <button
                 className={styles.btnAgendar}
