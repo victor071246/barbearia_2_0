@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil, faXmark, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { ImageCropper } from '../popups/ImageCropper';
 import { api } from '../../api/client';
 import styles from './ItemCard.module.css';
 
@@ -34,6 +35,10 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
   );
   const [tipo, setTipo] = useState(item.tipo ?? 'produto');
   const [linkPagamento, setLinkPagamento] = useState(item.link_pagamento ?? '');
+
+  const [cropperOpen, setCropperOpen] = useState(false);
+  const [rawImageSrc, setRawImageSrc] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const handleSave = async () => {
     try {
@@ -102,8 +107,12 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
             )?.click()
           }
         >
-          {item.image_url && (
-            <img src={item.image_url} alt="" className={styles.imagePreview} />
+          {(previewUrl || item.image_url) && (
+            <img
+              src={previewUrl ?? item.image_url!}
+              alt=""
+              className={styles.imagePreview}
+            ></img>
           )}
           <span className={styles.imageEditLabel}>Trocar foto</span>
           <input
@@ -111,7 +120,17 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
             type="file"
             accept="image/*"
             className={styles.fileInput}
-            onChange={(e) => setImagem(e.target.files?.[0] ?? null)}
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+              const reader = new FileReader();
+              reader.onload = () => {
+                setRawImageSrc(reader.result as string);
+                setCropperOpen(true);
+              };
+              reader.readAsDataURL(file);
+              e.target.value = '';
+            }}
           />
         </div>
       ) : (
@@ -198,6 +217,21 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
           </>
         )}
       </div>
+      {cropperOpen && rawImageSrc && (
+        <ImageCropper
+          imageSrc={rawImageSrc}
+          onConfirm={(croppedFile) => {
+            setImagem(croppedFile);
+            setPreviewUrl(URL.createObjectURL(croppedFile));
+            setCropperOpen(false);
+            setRawImageSrc(null);
+          }}
+          onCancel={() => {
+            setCropperOpen(false);
+            setRawImageSrc(null);
+          }}
+        ></ImageCropper>
+      )}
     </div>
   );
 }

@@ -1,0 +1,186 @@
+/* ── Overlay escuro ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+/* ── Modal ── */
+.modal {
+  background: #1a1a1a;
+  border: 1px solid #444;
+  border-radius: 12px;
+  width: 90vw;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideUp 0.25s ease;
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2dvh 2dvw;
+  border-bottom: 1px solid #333;
+}
+
+.title {
+  color: #fff;
+  font-size: 2dvh;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 2.2dvh;
+  cursor: pointer;
+  padding: 0.5dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.closeBtn:hover {
+  color: #ff6b6b;
+}
+
+/* ── Container do Cropper ── */
+/* position relative é obrigatório pra lib funcionar */
+.cropContainer {
+  position: relative;
+  width: 100%;
+  height: 50dvh;
+  background: #111;
+}
+
+/* ── Controles (zoom) ── */
+.controls {
+  padding: 2dvh 2dvw;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5dvh;
+  border-top: 1px solid #333;
+}
+
+.sliderRow {
+  display: flex;
+  align-items: center;
+  gap: 1.5dvw;
+}
+
+.sliderLabel {
+  color: #aaa;
+  font-size: 1.5dvh;
+  min-width: 5dvw;
+}
+
+.slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: #333;
+  border-radius: 2px;
+  outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #56544b;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  background: #6e6b60;
+}
+
+.slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #56544b;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* ── Botões ── */
+.actions {
+  display: flex;
+  gap: 1dvw;
+  padding: 0 2dvw 2dvh;
+}
+
+.btnCancel,
+.btnConfirm {
+  flex: 1;
+  padding: 1.2dvh;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.6dvh;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+}
+
+.btnCancel {
+  background: #333;
+  color: #fff;
+}
+
+.btnCancel:hover {
+  background: #444;
+}
+
+.btnConfirm {
+  background: #56544b;
+  color: #fff;
+}
+
+.btnConfirm:hover {
+  background: #6e6b60;
+}
+
+.btnConfirm:active,
+.btnCancel:active {
+  transform: translateY(1px);
+}
+
+/* ── Animações ── */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
