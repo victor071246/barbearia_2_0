@@ -106,3 +106,56 @@
   color: white;
   transform: rotate(15deg); /* cancela o rotate do slice */
 }
+/* ══════════ DESKTOP (accordion horizontal) ══════════ */
+@media (min-width: 1024px) {
+  .container {
+    height: 85dvh;
+    padding-top: 0;
+  }
+
+  .box {
+    width: 98%;
+    height: 90%;
+    overflow: hidden;
+  }
+
+  .grid {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .slice {
+    position: relative;
+    width: 33.33%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    transform: none;
+    overflow: hidden;
+  }
+
+  .slice_content {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .slice_content img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .slice_content span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
+  }
+}

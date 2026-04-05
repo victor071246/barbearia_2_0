@@ -146,7 +146,7 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
           <img
             src={item.image_url}
             alt={item.nome}
-            className={styles.imagem}
+            className={`${isAuthenticated ? styles.imagem_edicao : styles.imagem}`}
           ></img>
         )
       )}
