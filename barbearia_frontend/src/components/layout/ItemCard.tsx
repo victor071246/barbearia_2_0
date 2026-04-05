@@ -4,6 +4,8 @@ import { faPencil, faXmark, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { ImageCropper } from '../popups/ImageCropper';
 import { api } from '../../api/client';
 import styles from './ItemCard.module.css';
+import { LabeledInput } from '../ui/LabeledInput';
+import { LabeledSelect } from '../ui/LabeledSelect';
 
 interface Item {
   id: number;
@@ -71,6 +73,12 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
     setEditing(false);
     setTipo(item.tipo ?? 'produto');
     setLinkPagamento(item.link_pagamento ?? '');
+  };
+
+  const openLink = (url: string) => {
+    if (!url) return;
+    const normalizedUrl = url.startsWith('http') ? url : `https://${url}`;
+    window.open(normalizedUrl, '_blank');
   };
 
   return (
@@ -146,47 +154,47 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
       <div className={styles.info}>
         {editing ? (
           <>
-            <input
-              className={styles.input}
+            <LabeledInput
+              label="Nome"
               value={nome}
               onChange={(e) => setNome(e.target.value)}
-            ></input>
-            <input
-              className={styles.input}
+            ></LabeledInput>
+            <LabeledInput
+              label="Preço"
               type="number"
               value={preco}
               onChange={(e) => setPreco(e.target.value)}
-            ></input>
-            <input
-              className={styles.input}
+            ></LabeledInput>
+            <LabeledInput
+              label="Descrição"
               value={descricao}
               onChange={(e) => setDescricao(e.target.value)}
-            ></input>
-            <input
-              className={styles.input}
+            ></LabeledInput>
+            <LabeledInput
+              label="Estoque"
               type="number"
               value={estoqueAtual}
               onChange={(e) => setEstoqueAtual(e.target.value)}
-            ></input>
-            <input
-              className={styles.input}
+            ></LabeledInput>
+            <LabeledInput
+              label="Est. mín"
               type="number"
               value={estoqueMinimo}
               onChange={(e) => setEstoqueMinimo(e.target.value)}
-            ></input>
-            <select
-              className={styles.input}
+            ></LabeledInput>
+            <LabeledSelect
+              label="Tipo"
               value={tipo}
               onChange={(e) => setTipo(e.target.value)}
             >
               <option value="produto">Produto</option>
               <option value="servico">Serviço</option>
-            </select>
-            <input
-              className={styles.input}
+            </LabeledSelect>
+            <LabeledInput
+              label="Link"
               placeholder={linkPagamento}
               onChange={(e) => setLinkPagamento(e.target.value)}
-            ></input>
+            ></LabeledInput>
           </>
         ) : (
           <>
@@ -197,10 +205,7 @@ export function ItemCard({ item, isAuthenticated, onUpdated }: ItemCardProps) {
             {item.tipo === 'servico' ? (
               <button
                 className={styles.btnAgendar}
-                onClick={() =>
-                  item.link_pagamento &&
-                  window.open(item.link_pagamento, '_blank')
-                }
+                onClick={() => openLink(item.link_pagamento!)}
               >
                 Agendar
               </button>

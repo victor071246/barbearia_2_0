@@ -16,6 +16,8 @@
 .editing {
   border-color: #56544b;
   box-shadow: 0 0 12px rgba(86, 84, 75, 0.3);
+  min-height: 65.5dvh;
+  border-right: none; /* funde com a orelha */
 }
 /* ── Imagem ── */
 .imagem {
@@ -53,7 +55,7 @@
   border-left: 1px solid #444;
   border-radius: 0 50px 50px 0;
   width: 4dvw;
-  height: 39.5dvh;
+  height: 39.8dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -86,7 +88,7 @@
   justify-content: center;
   z-index: 10;
   gap: 2dvh;
-  height: 53dvh;
+  height: 65.5dvh;
   padding: 1.5dvh 0;
 }
 .saveIcon {
