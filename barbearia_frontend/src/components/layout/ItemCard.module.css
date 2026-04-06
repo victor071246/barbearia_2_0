@@ -250,3 +250,53 @@
 .btnComprar:active {
   transform: translateY(0);
 }
+@media (min-width: 1024px) {
+  .card {
+    border-radius: 8px;
+  }
+
+  .imagem,
+  .imagem_edicao {
+    border-radius: 8px 8px 0 0;
+  }
+
+  /* Orelha vira ícone pequeno no canto */
+  .editIcon {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    left: auto;
+    transform: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    border: none;
+  }
+
+  .editIcon svg {
+    font-size: 14px;
+  }
+
+  /* Modo edição vira modal/overlay no futuro, por agora esconde */
+  .editing {
+    min-height: auto;
+    border-right: 1px solid #444;
+  }
+
+  .editActions {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    left: auto;
+    transform: none;
+    width: auto;
+    height: auto;
+    flex-direction: row;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    border: none;
+  }
+}

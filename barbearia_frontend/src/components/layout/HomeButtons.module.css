@@ -58,5 +58,21 @@
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
+
 @media (min-width: 1024px) {
+  .btn1,
+  .btn2,
+  .btn3 {
+    top: 35dvh;
+  }
+
+  .btn1 {
+    left: -35dvw;
+    transform: translateX(0%);
+  }
+
+  .btn3 {
+    left: 30dvw;
+    transform: translateX(0%);
+  }
 }

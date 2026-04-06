@@ -44,3 +44,20 @@
   color: #ffffff;
   font-size: 1.8dvh;
 }
+
+.mapa_container {
+}
+@media (min-width: 1024px) {
+  .mapa_container {
+    padding: 3dvw;
+    width: 40%;
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .mapa {
+    border-radius: 15px;
+    overflow: hidden;
+  }
+}
