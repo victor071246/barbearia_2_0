@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: usuario_vps_barbearia
+      POSTGRES_PASSWORD: Barbearia@2802prod
+      POSTGRES_DB: barbearia
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build: ./barbearia_backend
+    environment:
+      DATABASE_URL: postgres://usuario_vps_barbearia:Barbearia@2802prod@db:5432/barbearia
+    depends_on:
+      - db
+
+  frontend:
+    build: ./barbearia_frontend
+
+  nginx:
+    build: ./nginx
+    ports:
+      - '80:80'
+    depends_on:
+      - backend
+      - frontend
+
+volumes:
+  pgdata:
